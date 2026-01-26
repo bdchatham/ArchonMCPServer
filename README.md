@@ -1,40 +1,119 @@
-# Archon-Ready Repository Template
+# ArchonMCPServer
 
-This is a GitHub repository template configured for the **Archon** RAG system. It includes Kiro steering that automatically maintains accurate, RAG-ready documentation.
+MCP (Model Context Protocol) server for the Archon RAG system. Exposes Archon's knowledge base as standardized tools that LLM clients (Kiro, Claude Desktop, Cursor) can discover and invoke for grounded decision-making.
 
-## What's Included
+## What is This?
 
-### Documentation Structure
-- `.kiro/docs/` - Complete documentation skeleton optimized for RAG retrieval
-- `CLAUDE.md` - Documentation contract and standards
-- All required documentation files (overview, architecture, operations, api, data-models, faq)
+ArchonMCPServer wraps the Archon Query Service with an MCP-compliant HTTP API, allowing AI assistants to:
+- Search across internal Archon/Aphex documentation
+- Retrieve full documents for detailed context
+- List available repositories in the knowledge base
 
-### Kiro Integration
-- `.kiro/steering/archon-docs.md` - Always-active steering that enforces documentation standards
-- Automatic documentation maintenance across all Kiro tasks
-- RAG-friendly structure and provenance tracking
+This enables **grounded, citation-backed responses** instead of hallucinated assumptions about internal architecture.
 
-## Getting Started
+## Quick Start
 
-1. **Use this template** to create a new repository
-2. **Customize** the documentation files under `.kiro/docs/` for your project
-3. **Work with Kiro** - the steering will automatically maintain documentation standards
+### Local Development
 
-## Documentation Standards
+```bash
+# Install dependencies
+pip install -e .
 
-All documentation follows these principles:
+# Set Query Service URL (optional, defaults to Kubernetes service)
+export QUERY_SERVICE_URL=http://localhost:8080
 
-- **Grounded in code** - Every statement references actual code or infrastructure
-- **RAG-friendly** - Structured for optimal retrieval (400-800 token sections)
-- **Provenance** - Clear "Source" references to relevant files
-- **No hallucinations** - Only documented, verifiable behavior
-- **Always current** - Updated alongside code changes
+# Run server
+python -m archon_mcp
+```
 
-## Archon Integration
+Server runs on `http://localhost:8090`
 
-This repository is configured to be ingested by Archon, which reads all Markdown files under `.kiro/docs/` to build mental models for sourcing code and architectural information.
+### Docker
 
-See `CLAUDE.md` for the complete documentation contract.
+```bash
+docker build -t archon-mcp-server .
+docker run -p 8090:8090 \
+  -e QUERY_SERVICE_URL=http://query.archon-knowledge-base:8080 \
+  archon-mcp-server
+```
+
+### Kubernetes
+
+See `.kiro/docs/operations.md` for deployment instructions.
+
+## Available Tools
+
+### archon.search
+Search across internal documentation with ranked results and provenance.
+
+```json
+{
+  "name": "archon.search",
+  "arguments": {
+    "query": "How do I deploy a service?",
+    "top_k": 5,
+    "repo_filter": "AphexPlatformInfrastructure"
+  }
+}
+```
+
+### archon.get_document
+Fetch full document text for detailed context.
+
+```json
+{
+  "name": "archon.get_document",
+  "arguments": {
+    "doc_id": "uuid-from-search-results"
+  }
+}
+```
+
+### archon.list_repos
+List available repositories in the knowledge base.
+
+```json
+{
+  "name": "archon.list_repos",
+  "arguments": {}
+}
+```
+
+## Integration with Kiro
+
+Kiro CLI automatically uses these tools when the `.kiro/steering/archon-rag.md` steering file is present (included in ArchonKiroTemplate).
+
+The steering ensures Kiro:
+- Calls MCP tools before making implementation decisions
+- Grounds claims in retrieved passages with citations
+- Explicitly states when information cannot be verified
+
+## Architecture
+
+ArchonMCPServer is a thin FastAPI wrapper around `AphexServiceClients.QueryClient`:
+
+```mermaid
+graph TD
+    A[Kiro CLI] -->|HTTP/MCP| B[ArchonMCPServer]
+    B -->|QueryClient| C[Query Service :8080]
+    C --> D[Qdrant 1.16.3]
+    
+    style B fill:#e1f5ff
+    style C fill:#fff4e1
+    style D fill:#f0f0f0
+```
+
+See `.kiro/docs/architecture.md` for detailed design.
+
+## Documentation
+
+Complete documentation under `.kiro/docs/`:
+- `overview.md` - High-level purpose and context
+- `architecture.md` - System design and components
+- `operations.md` - Deployment and operational procedures
+- `api.md` - MCP protocol and tool schemas
+- `data-models.md` - Request/response structures
+- `faq.md` - Common questions and troubleshooting
 
 ## License
 
