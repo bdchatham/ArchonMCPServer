@@ -31,9 +31,10 @@ async def search(query: str, top_k: int = 5, repo_filter: str = "") -> dict:
     chunks = [
         {
             "source": chunk.source,
-            "repo": chunk.metadata.get("repo", "unknown"),
+            "repo": chunk.source.split("/")[0] if "/" in chunk.source else "unknown",
             "content": chunk.content,
             "score": chunk.score,
+            "chunk_index": chunk.chunk_index,
         }
         for chunk in results
     ]
