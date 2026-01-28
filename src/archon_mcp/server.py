@@ -6,7 +6,8 @@ from aphex_clients.query import QueryClient
 
 QUERY_SERVICE_URL = os.getenv("QUERY_SERVICE_URL", "http://query.archon-knowledge-base:8080")
 
-mcp = FastMCP("Archon Knowledge Base")
+# Configure FastMCP to listen on all interfaces
+mcp = FastMCP("Archon Knowledge Base", host="0.0.0.0", port=3000)
 
 
 @mcp.tool()
