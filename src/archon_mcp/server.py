@@ -7,8 +7,9 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 QUERY_SERVICE_URL = os.getenv("QUERY_SERVICE_URL", "http://query.archon-knowledge-base:8080")
+PORT = int(os.getenv("PORT", "3000"))
 
-mcp = FastMCP("Archon Knowledge Base")
+mcp = FastMCP("Archon Knowledge Base", host="0.0.0.0", port=PORT)
 
 
 @mcp.custom_route("/health", methods=["GET"])
