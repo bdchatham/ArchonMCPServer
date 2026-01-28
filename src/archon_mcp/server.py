@@ -3,10 +3,18 @@
 import os
 from mcp.server.fastmcp import FastMCP
 from aphex_clients.query import QueryClient
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 
 QUERY_SERVICE_URL = os.getenv("QUERY_SERVICE_URL", "http://query.archon-knowledge-base:8080")
 
 mcp = FastMCP("Archon Knowledge Base")
+
+
+@mcp.custom_route("/health", methods=["GET"])
+async def health_check(request: Request) -> JSONResponse:
+    """Health check endpoint for Kubernetes probes."""
+    return JSONResponse({"status": "healthy"})
 
 
 @mcp.tool()
