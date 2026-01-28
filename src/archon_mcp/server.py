@@ -59,8 +59,3 @@ def list_repos() -> dict:
         {"name": "AphexCLI", "description": "Command-line interface"},
     ]
     return {"repos": repos}
-
-
-if __name__ == "__main__":
-    port = int(os.getenv("PORT", "3000"))
-    mcp.run(transport="streamable-http", host="0.0.0.0", port=port, json_response=True, stateless_http=True)
