@@ -1,12 +1,12 @@
 """MCP server for Archon RAG system."""
 
 import os
-from mcp.server.mcpserver import MCPServer
+from mcp.server.fastmcp import FastMCP
 from aphex_clients.query import QueryClient
 
 QUERY_SERVICE_URL = os.getenv("QUERY_SERVICE_URL", "http://query.archon-knowledge-base:8080")
 
-mcp = MCPServer("Archon Knowledge Base")
+mcp = FastMCP("Archon Knowledge Base")
 
 
 @mcp.tool()
