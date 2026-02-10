@@ -1,5 +1,6 @@
 """MCP protocol models and schemas."""
 
+from dataclasses import dataclass, field
 from typing import List, Optional, Any
 from pydantic import BaseModel, Field
 
@@ -74,3 +75,89 @@ class RepoInfo(BaseModel):
 class ListReposResponse(BaseModel):
     """Response from archon.list_repos."""
     repos: List[RepoInfo]
+
+
+# --- Enhanced Tool Data Models ---
+# Domain models for enhanced MCP tools (graph queries, ARN-enriched search, ARN resolution).
+# These use Python dataclasses per the enhanced-tools design spec.
+
+
+@dataclass
+class EnhancedSearchResult:
+    """Search result with ARN metadata for graph traversal.
+
+    Extends the existing search result structure with ARN metadata fields
+    while maintaining backward compatibility with existing fields.
+    """
+
+    content: str
+    source: str
+    score: float
+    chunk_index: int
+    repo: str
+
+    arn: str
+    related_arns: list[str] = field(default_factory=list)
+    symbol_name: str | None = None
+    symbol_kind: str | None = None
+    package: str = ""
+
+
+@dataclass
+class GraphQLError:
+    """GraphQL error structure per the GraphQL specification."""
+
+    message: str
+    locations: list[dict] | None = None
+    path: list[str | int] | None = None
+    extensions: dict | None = None
+
+
+@dataclass
+class GraphQueryInput:
+    """Input for the archon.graph tool."""
+
+    query: str
+    variables: dict | None = None
+
+
+@dataclass
+class GraphQueryOutput:
+    """Output from the archon.graph tool."""
+
+    data: dict | None
+    errors: list[GraphQLError] | None = None
+
+
+@dataclass
+class ResolveInput:
+    """Input for the archon.resolve tool."""
+
+    arn: str
+
+
+@dataclass
+class ResolveOutput:
+    """Output from the archon.resolve tool."""
+
+    success: bool
+    file_path: str | None = None
+    line_number: int | None = None
+    error: str | None = None
+
+
+@dataclass
+class ResolveResult:
+    """Internal result from ARN resolution via the Code Graph."""
+
+    found: bool
+    file_path: str | None = None
+    line_number: int | None = None
+
+
+@dataclass
+class ARNValidationResult:
+    """Result of ARN format validation."""
+
+    valid: bool
+    error: str | None = None

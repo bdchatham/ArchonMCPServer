@@ -1,0 +1,4 @@
+# file: /Users/brandonchatham/personal-work/ArchonMCPServer/src/archon_mcp/server.py
+# hypothesis_version: 6.151.5
+
+[0.0, '/', '/health', '0.0.0.0', '3000', 'AphexCLI', 'AphexServiceClients', 'ArchonAgent', 'GET', 'GRAPH_SERVICE_URL', 'PORT', 'Platform controllers', 'QUERY_SERVICE_URL', 'RAG infrastructure', 'Shared API clients', 'Tekton task catalog', 'Unknown error', 'arn', 'chunk_index', 'chunks', 'content', 'data', 'description', 'details', 'doc_id', 'error', 'errors', 'extensions', 'filePath', 'healthy', 'lineNumber', 'locations', 'message', 'name', 'package', 'path', 'query', 'related_arns', 'repo', 'repos', 'score', 'source', 'status', 'success', 'symbol_kind', 'symbol_name', 'unknown']

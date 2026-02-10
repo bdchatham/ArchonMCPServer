@@ -1,0 +1,4 @@
+# file: /Users/brandonchatham/personal-work/ArchonMCPServer/src/archon_mcp/clients/graph_client.py
+# hypothesis_version: 6.151.5
+
+[30.0, '/', '/graphql', 'Code Graph', 'Unknown error', 'cannot query field', 'code', 'data', 'errors', 'extensions', 'locations', 'message', 'path', 'query', 'syntax error', 'variables']

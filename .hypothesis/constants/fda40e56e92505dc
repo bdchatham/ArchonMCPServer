@@ -1,0 +1,4 @@
+# file: /Users/brandonchatham/personal-work/ArchonMCPServer/src/archon_mcp/clients/arn_validation.py
+# hypothesis_version: 6.151.5
+
+['#', ', ', '/', ':', 'ARN cannot be empty', 'arn:archon:', 'code', 'doc', 'infra', 'k8s']
