@@ -5,7 +5,7 @@ description = "MCP server for Archon RAG system"
 requires-python = ">=3.11"
 dependencies = [
     "mcp[cli]>=1.26.0",
-    "aphex-service-clients @ git+https://github.com/bdchatham/AphexServiceClients.git@mainline",
+    "aphex-service-clients>=0.2.2",
 ]
 
 [project.optional-dependencies]
