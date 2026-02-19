@@ -164,15 +164,23 @@ async def resolve(arn: str) -> dict:
 
 
 @mcp.tool()
-def get_document(doc_id: str) -> dict:
+async def get_document(doc_id: str) -> dict:
     """Fetch full document text for a doc_id.
     
     Use when you need complete context for edits or detailed understanding.
     """
-    return {
-        "doc_id": doc_id,
-        "message": "Document retrieval not yet implemented"
-    }
+    try:
+        async with QueryClient(base_url=QUERY_SERVICE_URL) as client:
+            content = await client.get_document(doc_id=doc_id)
+            return {
+                "doc_id": doc_id,
+                "content": content,
+            }
+    except Exception as exc:
+        return {
+            "doc_id": doc_id,
+            "error": f"Document retrieval failed: {exc}",
+        }
 
 
 @mcp.tool()
